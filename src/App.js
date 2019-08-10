@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
-
+const DEFAULT_QUERY = "redux";
+const PATH_BASE = "https://hn.algolia.com/api/v1";
+const PATH_SEARCH = "/search";
+const PARAM_SEARCH = "query=";
 const list = [
   {
     title: "React",
@@ -23,17 +26,37 @@ const list = [
 const isSearched = searchTerm => item =>
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
+const url = `${PATH_BASE}${PATH_SEARCH}`;
+console.log(url);
+
+const large = {
+  width: "40%",
+};
+
+const mid = {
+  width: "30%",
+};
+
+const small = {
+  width: "30%",
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      list,
-      searchTerm: "",
+      result: null,
+      searchTerm: DEFAULT_QUERY,
     };
 
+    this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
+  }
+
+  setSearchTopStories(result) {
+    this.setState({ result });
   }
 
   onSearchChange(event) {
@@ -46,14 +69,30 @@ class App extends Component {
     this.setState({ list: updatedList });
   }
 
+  componentDidMount() {
+    const { searchTerm } = this.state;
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+      .then(response => response.json())
+      .then(result => this.setSearchTopStories(result))
+      .catch(error => error);
+  }
   render() {
-    const { searchTerm, list } = this.state;
+    const { searchTerm, result } = this.state;
+    if (!result) {
+      return null;
+    }
     return (
-      <div className="App">
-        <Search value={searchTerm} onChange={this.onSearchChange}>
-          Search
-        </Search>
-        <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss} />
+      <div className="page">
+        <div className="interactions">
+          <Search value={searchTerm} onChange={this.onSearchChange}>
+            Search
+          </Search>
+        </div>
+        <Table
+          list={result.hits}
+          pattern={searchTerm}
+          onDismiss={this.onDismiss}
+        />
       </div>
     );
   }
@@ -69,16 +108,16 @@ const Search = ({ value, onChange, children }) => {
 
 const Table = ({ list, pattern, onDismiss }) => {
   return (
-    <div>
+    <div className="table">
       {list.filter(isSearched(pattern)).map(item => (
-        <div key={item.objectID}>
-          <span>
+        <div key={item.objectID} className="table-row">
+          <span style={large}>
             <a href={item.url}>{item.title}</a>
           </span>
-          <span>{item.author}</span>
-          <span>{item.num_comments}</span>
-          <span>{item.points}</span>
-          <span>
+          <span style={mid}>{item.author}</span>
+          <span style={small}>{item.num_comments}</span>
+          <span style={small}>{item.points}</span>
+          <span style={small}>
             <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
           </span>
         </div>
@@ -89,7 +128,7 @@ const Table = ({ list, pattern, onDismiss }) => {
 
 const Button = ({ onclick, className = "", children }) => {
   return (
-    <button onClick={onclick} className={className} type="button">
+    <button onClick={onclick} className="button-inline" type="button">
       {children}
     </button>
   );
