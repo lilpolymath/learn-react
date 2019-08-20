@@ -1,27 +1,10 @@
-import React, { Component } from "react";
-import "./App.css";
-const DEFAULT_QUERY = "redux";
-const PATH_BASE = "https://hn.algolia.com/api/v1";
-const PATH_SEARCH = "/search";
-const PARAM_SEARCH = "query=";
-const list = [
-  {
-    title: "React",
-    url: "https://reactjs.org/",
-    author: "Jordan Walke",
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: "Redux",
-    url: "https://redux.js.org/",
-    author: "Dan Abramov, Andrew Clark",
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
+import React, { Component } from 'react';
+import './App.css';
+const DEFAULT_QUERY = 'react native';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+const list = [];
 
 const isSearched = searchTerm => item =>
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -30,15 +13,15 @@ const url = `${PATH_BASE}${PATH_SEARCH}`;
 console.log(url);
 
 const large = {
-  width: "40%",
+  width: '40%',
 };
 
 const mid = {
-  width: "30%",
+  width: '30%',
 };
 
 const small = {
-  width: "30%",
+  width: '30%',
 };
 
 class App extends Component {
@@ -126,7 +109,7 @@ const Table = ({ list, pattern, onDismiss }) => {
   );
 };
 
-const Button = ({ onclick, className = "", children }) => {
+const Button = ({ onclick, className = '', children }) => {
   return (
     <button onClick={onclick} className="button-inline" type="button">
       {children}
