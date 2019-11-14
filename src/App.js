@@ -55,8 +55,10 @@ class App extends Component {
 
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
-    const updatedHits = this.state.list.result.hits.filter(isNotId);
-    this.setState({ ...this.state.result, hits: updatedHits });
+    const updatedHits = this.state.result.hits.filter(isNotId);
+    this.setState({
+      result: { ...this.state.result, hits: updatedHits },
+    });
   }
 
   render() {
@@ -83,45 +85,39 @@ class App extends Component {
   }
 }
 
-const Search = ({ value, onChange, children }) => {
-  return (
-    <form>
-      {children} <input type="text" value={value} onChange={onChange} />
-    </form>
-  );
-};
+const Search = ({ value, onChange, children }) => (
+  <form>
+    {children} <input type="text" value={value} onChange={onChange} />
+  </form>
+);
 
-const Table = ({ list, pattern, onDismiss }) => {
-  return (
-    <div className="table">
-      {list.filter(isSearched(pattern)).map(item => (
-        <div key={item.objectID} className="table-row">
-          <span style={large}>
-            <a href={item.url}>{item.title}</a>
-          </span>
-          <span style={mid}>{item.author}</span>
-          <span style={small}>{item.num_comments}</span>
-          <span style={small}>{item.points}</span>
-          <span style={small}>
-            <Button
-              onClick={() => onDismiss(item.objectID)}
-              className="button-inline"
-            >
-              Dismiss
-            </Button>
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-};
+const Table = ({ list, pattern, onDismiss }) => (
+  <div className="table">
+    {list.filter(isSearched(pattern)).map(item => (
+      <div key={item.objectID} className="table-row">
+        <span style={large}>
+          <a href={item.url}>{item.title}</a>
+        </span>
+        <span style={mid}>{item.author}</span>
+        <span style={small}>{item.num_comments}</span>
+        <span style={small}>{item.points}</span>
+        <span style={small}>
+          <Button
+            onClick={() => onDismiss(item.objectID)}
+            className="button-inline"
+          >
+            Dismiss
+          </Button>
+        </span>
+      </div>
+    ))}
+  </div>
+);
 
-const Button = ({ onclick, className = '', children }) => {
-  return (
-    <button onClick={onclick} className={className} type="button">
-      {children}
-    </button>
-  );
-};
+const Button = ({ onClick, className = '', children }) => (
+  <button onClick={onClick} className={className} type="button">
+    {children}
+  </button>
+);
 
 export default App;
