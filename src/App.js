@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-const DEFAULT_QUERY = 'react native';
+const DEFAULT_QUERY = 'react';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
@@ -48,8 +48,9 @@ class App extends Component {
 
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
-    const updatedList = this.state.list.filter(isNotId);
-    this.setState({ list: updatedList });
+    console.log('I am working.');
+    const updatedHits = this.state.list.result.hits.filter(isNotId);
+    this.setState({ ...this.state.result, hits: updatedHits });
   }
 
   componentDidMount() {
@@ -59,6 +60,7 @@ class App extends Component {
       .then(result => this.setSearchTopStories(result))
       .catch(error => error);
   }
+
   render() {
     const { searchTerm, result } = this.state;
     if (!result) {
@@ -101,7 +103,7 @@ const Table = ({ list, pattern, onDismiss }) => {
           <span style={small}>{item.num_comments}</span>
           <span style={small}>{item.points}</span>
           <span style={small}>
-            <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
+            <Button onClick={item => onDismiss(item.objectID)}>Dismiss</Button>
           </span>
         </div>
       ))}
