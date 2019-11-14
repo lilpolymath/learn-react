@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import './App.css';
 
-const DEFAULT_QUERY = 'react';
+const DEFAULT_QUERY = 'redux';
 
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 
-const large = {
+const largeColumn = {
   width: '40%',
 };
 
-const mid = {
+const midColumn = {
   width: '30%',
 };
 
-const small = {
-  width: '30%',
+const smallColumn = {
+  width: '10%',
 };
 
 const isSearched = searchTerm => item =>
@@ -95,13 +95,13 @@ const Table = ({ list, pattern, onDismiss }) => (
   <div className="table">
     {list.filter(isSearched(pattern)).map(item => (
       <div key={item.objectID} className="table-row">
-        <span style={large}>
+        <span style={largeColumn}>
           <a href={item.url}>{item.title}</a>
         </span>
-        <span style={mid}>{item.author}</span>
-        <span style={small}>{item.num_comments}</span>
-        <span style={small}>{item.points}</span>
-        <span style={small}>
+        <span style={midColumn}>{item.author}</span>
+        <span style={smallColumn}>{item.num_comments}</span>
+        <span style={smallColumn}>{item.points}</span>
+        <span style={smallColumn}>
           <Button
             onClick={() => onDismiss(item.objectID)}
             className="button-inline"
