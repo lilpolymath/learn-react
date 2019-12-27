@@ -6,21 +6,19 @@ const DEFAULT_QUERY = 'redux';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
+const PARAM_PAGE = 'page=';
 
 const largeColumn = {
   width: '40%',
 };
 
-const midColumn = {
+const mid = {
   width: '30%',
 };
 
-const smallColumn = {
+const small = {
   width: '10%',
 };
-
-const isSearched = searchTerm => item =>
-  item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
 class App extends Component {
   constructor(props) {
@@ -32,7 +30,9 @@ class App extends Component {
     };
 
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
+    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
   }
 
@@ -40,18 +40,27 @@ class App extends Component {
     this.setState({ result });
   }
 
-  componentDidMount() {
-    const { searchTerm } = this.state;
-
+  fetchSearchTopStories(searchTerm) {
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
       .then(response => response.json())
       .then(result => this.setSearchTopStories(result))
       .catch(error => error);
   }
 
+  componentDidMount() {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+  }
+
   onSearchChange(event) {
     this.setState({ searchTerm: event.target.value });
   }
+
+  onSearchSubmit = event => {
+    const { searchTerm } = this.state;
+    this.fetchSearchTopStories(searchTerm);
+    event.preventDefault();
+  };
 
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
@@ -64,47 +73,44 @@ class App extends Component {
   render() {
     const { searchTerm, result } = this.state;
 
-    if (!result) {
-      return null;
-    }
-
     return (
-      <div className="page">
-        <div className="interactions">
-          <Search value={searchTerm} onChange={this.onSearchChange}>
+      <div className='page'>
+        <div className='interactions'>
+          <Search
+            value={searchTerm}
+            onChange={this.onSearchChange}
+            onSubmit={this.onSearchSubmit}
+          >
             Search
           </Search>
         </div>
-        <Table
-          list={result.hits}
-          pattern={searchTerm}
-          onDismiss={this.onDismiss}
-        />
+        {result && <Table list={result.hits} onDismiss={this.onDismiss} />}
       </div>
     );
   }
 }
 
-const Search = ({ value, onChange, children }) => (
-  <form>
-    {children} <input type="text" value={value} onChange={onChange} />
+const Search = ({ value, onChange, onSubmit, children }) => (
+  <form onSubmit={onSubmit}>
+    {children} <input type='text' value={value} onChange={onChange} />
+    <button type='button'>{children}</button>
   </form>
 );
 
-const Table = ({ list, pattern, onDismiss }) => (
-  <div className="table">
-    {list.filter(isSearched(pattern)).map(item => (
-      <div key={item.objectID} className="table-row">
+const Table = ({ list, onDismiss }) => (
+  <div className='table'>
+    {list.map(item => (
+      <div key={item.objectID} className='table-row'>
         <span style={largeColumn}>
           <a href={item.url}>{item.title}</a>
         </span>
-        <span style={midColumn}>{item.author}</span>
-        <span style={smallColumn}>{item.num_comments}</span>
-        <span style={smallColumn}>{item.points}</span>
-        <span style={smallColumn}>
+        <span style={mid}>{item.author}</span>
+        <span style={small}>{item.num_comments}</span>
+        <span style={small}>{item.points}</span>
+        <span style={small}>
           <Button
             onClick={() => onDismiss(item.objectID)}
-            className="button-inline"
+            className='button-inline'
           >
             Dismiss
           </Button>
@@ -115,7 +121,7 @@ const Table = ({ list, pattern, onDismiss }) => (
 );
 
 const Button = ({ onClick, className = '', children }) => (
-  <button onClick={onClick} className={className} type="button">
+  <button onClick={onClick} className={className} type='button'>
     {children}
   </button>
 );
