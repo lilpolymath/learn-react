@@ -20,7 +20,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "https://lilpolymath.github.io/hackernews",
+  "homepage": "https://lilpolymath.github.io/learn-react",
   "browserslist": {
     "production": [
       ">0.2%",
