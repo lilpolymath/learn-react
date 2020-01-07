@@ -28,6 +28,7 @@ button {
   background: transparent;
   color: #808080;
   cursor: pointer;
+  outline-color: #ffdead;
 }
 button:hover {
   color: #222;

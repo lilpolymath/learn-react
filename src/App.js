@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
-
-const DEFAULT_QUERY = 'react native';
-const DEFAULT_HPP = 30;
-
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const PARAM_HPP = 'hitsPerPage=';
+import {
+  DEFAULT_HPP,
+  DEFAULT_QUERY,
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_HPP,
+  PARAM_PAGE,
+  PARAM_SEARCH,
+} from '../src/constants';
 
 const largeColumn = {
   width: '40%',
@@ -78,7 +78,6 @@ class App extends Component {
   onSearchChange(event) {
     this.setState({ searchTerm: event.target.value });
   }
-  
 
   onSearchSubmit = event => {
     const { searchTerm } = this.state;
