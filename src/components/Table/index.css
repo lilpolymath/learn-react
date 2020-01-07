@@ -1,0 +1,33 @@
+.table {
+  margin: 20px 0;
+}
+
+.table-header {
+  display: flex;
+  line-height: 24px;
+  font-size: 16px;
+  padding: 0 10px;
+  justify-content: space-between;
+}
+
+.table-empty {
+  margin: 200px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.table-row {
+  display: flex;
+  white-space: nowrap;
+  line-height: 24px;
+  padding: 0 10px;
+  margin: 10px;
+  background: #ffffff;
+  border: 1px solid #e3e3e3;
+}
+
+.table-row > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 5px;
+}

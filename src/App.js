@@ -10,18 +10,9 @@ import {
   PARAM_PAGE,
   PARAM_SEARCH,
 } from '../src/constants';
-
-const largeColumn = {
-  width: '40%',
-};
-
-const mid = {
-  width: '30%',
-};
-
-const small = {
-  width: '10%',
-};
+import Button from './components/Button';
+import Search from './components/Search';
+import Table from './components/Table';
 
 class App extends Component {
   constructor(props) {
@@ -136,41 +127,5 @@ class App extends Component {
     );
   }
 }
-
-const Search = ({ value, onChange, onSubmit, children }) => (
-  <form onSubmit={onSubmit}>
-    {children} <input type='text' value={value} onChange={onChange} />
-    <button type='button'>{children}</button>
-  </form>
-);
-
-const Table = ({ list, onDismiss }) => (
-  <div className='table'>
-    {list.map(item => (
-      <div key={item.objectID} className='table-row'>
-        <span style={largeColumn}>
-          <a href={item.url}>{item.title}</a>
-        </span>
-        <span style={mid}>{item.author}</span>
-        <span style={small}>{item.num_comments}</span>
-        <span style={small}>{item.points}</span>
-        <span style={small}>
-          <Button
-            onClick={() => onDismiss(item.objectID)}
-            className='button-inline'
-          >
-            Dismiss
-          </Button>
-        </span>
-      </div>
-    ))}
-  </div>
-);
-
-const Button = ({ onClick, className = '', children }) => (
-  <button onClick={onClick} className={className} type='button'>
-    {children}
-  </button>
-);
 
 export default App;
