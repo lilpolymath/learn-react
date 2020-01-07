@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const Search = ({ value, onChange, onSubmit, children }) => (
-  <form onSubmit={onSubmit}>
-    {children} <input type='text' value={value} onChange={onChange} />
-    <button type='button'>{children}</button>
-  </form>
-);
+class Search extends Component {
+  render() {
+    const { value, onChange, onSubmit, children } = this.props;
+    return (
+      <form onSubmit={onSubmit}>
+        {children} <input type='text' value={value} onChange={onChange} />
+        <button type='button'>{children}</button>
+      </form>
+    );
+  }
+}
+
+// const Search = ({ value, onChange, onSubmit, children }) => (
+//   <form onSubmit={onSubmit}>
+//     {children} <input type='text' value={value} onChange={onChange} />
+//     <button type='button'>{children}</button>
+//   </form>
+// );
 
 export default Search;
 
